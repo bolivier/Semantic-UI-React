@@ -3,6 +3,7 @@ import React from 'react'
 
 import Radio from 'src/addons/Radio/Radio'
 import Label from 'src/elements/Label/Label'
+import Input from 'src/elements/Input/Input'
 import FormField from 'src/collections/Form/FormField'
 import { SUI } from 'src/lib'
 import Button from 'src/elements/Button/Button'
@@ -10,6 +11,7 @@ import Checkbox from 'src/modules/Checkbox/Checkbox'
 import * as common from 'test/specs/commonTests'
 
 describe('FormField', () => {
+  const controls = ['button', 'input', 'select', 'textarea']
   common.isConformant(FormField)
   common.rendersChildren(FormField)
 
@@ -28,8 +30,6 @@ describe('FormField', () => {
 
   describe('control', () => {
     it('adds an HTML element child of the same type', () => {
-      const controls = ['button', 'input', 'select', 'textarea']
-
       controls.forEach((control) => {
         shallow(<FormField control={control} />).should.have.descendants(control)
       })
@@ -245,5 +245,14 @@ describe('FormField', () => {
         .find('input')
         .should.have.prop('aria-invalid', true)
     })
+  })
+
+  describe.only('forwardsRef', () => {
+    controls.forEach((control) => {
+      common.forwardsRef(FormField, { requiredProps: { control }, tagName: control })
+    })
+
+    common.forwardsRef(FormField, { requiredProps: { control: Input }, tagName: 'input' })
+    common.forwardsRef(FormField, { requiredProps: { control: Checkbox }, tagName: 'input' })
   })
 })
